@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>بوابة الطالب | تسجيل الحضور</title>
+    <!-- استدعاء خط Cairo الاحترافي -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;800;900&display=swap" rel="stylesheet">
+    
+    <style>
+        /* المتغيرات والألوان الأساسية */
+        :root {
+            --primary-color: #0f4c81; /* أزرق رسمي */
+            --secondary-color: #f8f9fa;
+            --text-dark: #2d3748;
+            --text-light: #718096;
+            --danger-bg: #0a0a0a;
+            --danger-red: #e53e3e;
+            --terminal-green: #00ff41;
+            --success-color: #059669;
+        }
+
+        body { 
+            font-family: 'Cairo', sans-serif; 
+            background-color: #e2e8f0; 
+            margin: 0; 
+            padding: 0; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow-x: hidden; /* تم التعديل للسماح بالتمرير الرأسي على الموبايل */
+        }
+
+        /* --- تصميم البوابة الرسمية (الطُعم) --- */
+        .container { 
+            max-width: 550px; 
+            width: 90%;
+            background: white; 
+            padding: 50px 40px; 
+            border-radius: 16px; 
+            box-shadow: 0 20px 40px rgba(0,0,0,0.08); 
+            text-align: center;
+            border-top: 6px solid var(--primary-color);
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        .logo-icon {
+            background-color: rgba(15, 76, 129, 0.1);
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 auto 20px;
+        }
+
+        h1 { 
+            color: var(--primary-color); 
+            font-size: 28px; 
+            font-weight: 800;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: var(--text-dark);
+            font-weight: 600;
+            font-size: 18px;
+            margin-bottom: 5px;
+        }
+
+        .description { 
+            color: var(--text-light); 
+            font-size: 15px; 
+            line-height: 1.8; 
+            margin-bottom: 30px;
+            background: #f8fafc;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .btn-primary { 
+            background-color: var(--primary-color); 
+            color: white; 
+            border: none; 
+            padding: 16px 32px; 
+            font-size: 18px; 
+            font-weight: 700;
+            font-family: 'Cairo', sans-serif;
+            border-radius: 8px; 
+            cursor: pointer; 
+            width: 100%;
+            transition: all 0.3s ease; 
+            box-shadow: 0 4px 6px rgba(15, 76, 129, 0.2);
+        }
+
+        .btn-primary:hover { 
+            background-color: #0b3a64; 
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(15, 76, 129, 0.3);
+        }
+
+        /* --- تصميم شاشة الاختراق (واقعية مفرطة - WannaCry Style) --- */
+        #hacked-screen { 
+            display: none; 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
+            background-color: #000000; /* خلفية سوداء كأن النظام سقط */
+            color: white; 
+            z-index: 9999; 
+            justify-content: center; 
+            align-items: center; 
+            font-family: Tahoma, Arial, sans-serif; /* خطوط النظام الأساسية للواقعية */
+            user-select: none;
+        }
+
+        .ransom-modal {
+            background: #8b0000; /* أحمر فيروس الفدية الكلاسيكي */
+            border: 3px solid #660000;
+            box-shadow: 0 0 50px rgba(255,0,0,0.2);
+            max-width: 850px;
+            width: 95%;
+            display: flex;
+            flex-direction: column;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .ransom-header {
+            background: linear-gradient(to bottom, #f0f0f0, #e0e0e0);
+            color: black;
+            padding: 8px 12px;
+            font-weight: bold;
+            font-size: 14px;
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 2px solid #555;
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+        }
+
+        .ransom-header-btns span {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            background: #ccc;
+            border: 1px solid #999;
+            margin-left: 4px;
+            text-align: center;
+            line-height: 14px;
+            font-size: 10px;
+            cursor: default;
+        }
+
+        .ransom-content {
+            display: flex;
+            flex-direction: row;
+            padding: 20px;
+            gap: 20px;
+        }
+
+        .ransom-left {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .lock-icon {
+            font-size: 80px;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 5px rgba(0,0,0,0.8);
+        }
+
+        .timer-box {
+            background: white;
+            border: 2px solid #555;
+            padding: 10px;
+            width: 100%;
+            margin-top: 15px;
+            text-align: center;
+            color: black;
+        }
+
+        .timer-box p {
+            font-size: 13px;
+            margin: 0 0 5px 0;
+            font-weight: bold;
+            color: #d32f2f;
+        }
+
+        .timer {
+            font-size: 28px;
+            color: #d32f2f; 
+            font-weight: bold;
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        .ransom-right {
+            flex: 2.5;
+            text-align: left;
+            direction: ltr;
+        }
+
+        .ransom-right h1 {
+            color: white;
+            font-size: 26px;
+            font-weight: bold;
+            margin-top: 0;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 2px black;
+        }
+
+        .ransom-details {
+            background: white;
+            padding: 15px;
+            font-size: 13px;
+            line-height: 1.5;
+            color: black;
+            border: inset 2px #ccc;
+            height: 160px;
+            overflow-y: auto;
+            margin-bottom: 15px;
+        }
+
+        .ransom-details p {
+            margin-top: 0;
+            margin-bottom: 10px;
+        }
+
+        .live-log {
+            background: black;
+            color: #00ff00;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 11px;
+            padding: 8px;
+            height: 60px;
+            border: inset 2px #555;
+            overflow: hidden;
+            margin-bottom: 15px;
+        }
+
+        .live-log-content {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+        }
+
+        .btc-section {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .btc-address {
+            background: white;
+            color: black;
+            padding: 8px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 14px;
+            flex: 1;
+            border: inset 2px #ccc;
+            user-select: all;
+        }
+
+        .action-btns {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+
+        .btn-os {
+            background: linear-gradient(to bottom, #f0f0f0, #d0d0d0);
+            color: black;
+            border: 2px outset #eee; 
+            padding: 8px 25px;
+            font-size: 14px;
+            font-family: Tahoma, sans-serif;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .btn-os:active {
+            border-style: inset;
+            background: #d0d0d0;
+        }
+
+        /* --- تصميم شاشة كشف الحقيقة (التوعية) --- */
+        #reveal-screen { 
+            display: none; 
+            background: white; 
+            padding: 40px; 
+            border-radius: 16px; 
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            text-align: center;
+            max-width: 600px;
+            width: 90%;
+            border-top: 6px solid var(--success-color);
+            animation: slideUp 0.6s ease-out;
+        }
+
+        .success-icon {
+            font-size: 60px;
+            margin-bottom: 10px;
+        }
+
+        #reveal-screen h2 {
+            color: var(--success-color);
+            font-size: 32px;
+            font-weight: 900;
+            margin-bottom: 15px;
+        }
+
+        .lesson-text {
+            color: var(--text-dark);
+            font-size: 18px;
+            line-height: 1.8;
+            margin-bottom: 20px;
+            background: #f0fdf4;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #bbf7d0;
+        }
+
+        .highlight {
+            color: var(--danger-red);
+            font-weight: 800;
+        }
+
+        .authors {
+            margin-top: 30px;
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--primary-color);
+            background: #eff6ff;
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        /* --- Animations --- */
+        @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* --- استجابة الموبايل (Responsive Design) --- */
+        @media (max-width: 600px) {
+            .container {
+                padding: 30px 20px;
+                width: 85%;
+            }
+            .logo-icon {
+                width: 70px;
+                height: 70px;
+            }
+            .logo-icon svg {
+                width: 35px;
+                height: 35px;
+            }
+            h1 {
+                font-size: 22px;
+            }
+            .subtitle {
+                font-size: 16px;
+            }
+            .description {
+                font-size: 14px;
+                padding: 12px;
+            }
+            .btn-primary {
+                font-size: 16px;
+                padding: 14px 20px;
+            }
+            
+            /* شاشة الاختراق للموبايل الجديدة (واقعية) */
+            .ransom-modal {
+                width: 100%;
+                height: 100vh;
+                border: none;
+                border-radius: 0;
+            }
+            .ransom-content {
+                flex-direction: column;
+                padding: 10px;
+                gap: 10px;
+                height: calc(100vh - 40px);
+                overflow-y: auto;
+            }
+            .ransom-left {
+                flex: none;
+                flex-direction: row;
+                gap: 10px;
+                align-items: center;
+            }
+            .lock-icon {
+                font-size: 50px;
+                margin-bottom: 0;
+            }
+            .timer-box {
+                margin-top: 0;
+                padding: 5px;
+            }
+            .timer {
+                font-size: 20px;
+            }
+            .ransom-right h1 {
+                font-size: 20px;
+                text-align: center;
+                margin-top: 10px;
+            }
+            .ransom-details {
+                height: 120px;
+                font-size: 12px;
+            }
+            .live-log {
+                height: 45px;
+                font-size: 10px;
+            }
+            .btc-section {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .btc-address {
+                text-align: center;
+                font-size: 12px;
+            }
+            .action-btns {
+                justify-content: center;
+                margin-top: 10px;
+                padding-bottom: 20px;
+            }
+            .btn-os {
+                padding: 12px 20px;
+                width: 100%;
+            }
+
+            /* شاشة الحقيقة للموبايل */
+            #reveal-screen {
+                padding: 30px 20px;
+                width: 85%;
+            }
+            .success-icon {
+                font-size: 50px;
+            }
+            #reveal-screen h2 {
+                font-size: 24px;
+            }
+            .lesson-text {
+                font-size: 15px;
+            }
+            .authors {
+                font-size: 16px;
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- الشاشة الأولى: البوابة الرسمية المزيفة -->
+    <div class="container" id="normal-page">
+        <div class="logo-icon">
+            <svg width="45" height="45" viewBox="0 0 24 24" fill="none" stroke="#0f4c81" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
+                <path d="M6 12v5c3 3 9 3 12 0v-5"/>
+            </svg>
+        </div>
+        <h1>بوابة المقررات الإلكترونية</h1>
+        <div class="subtitle">مادة استراتيجيات نظم المعلومات</div>
+        <div class="description">
+            <strong>تنبيه هام:</strong> يرجى النقر على الزر أدناه لتأكيد حضورك لمحاضرة اليوم وتحميل المادة العلمية (PDF). 
+            <br> <span style="color:#e53e3e; font-size: 13px;">*عدم التأكيد قد يؤدي إلى تسجيلك غائباً في النظام.</span>
+        </div>
+        <button class="btn-primary" onclick="triggerHack()">تأكيد الحضور وتحميل الملفات</button>
+    </div>
+
+    <!-- الشاشة الثانية: الاختراق (تصميم Ransomware فائق الواقعية) -->
+    <div id="hacked-screen">
+        <div class="ransom-modal">
+            <div class="ransom-header">
+                <span>Wana Decrypt0r 2.0</span>
+                <div class="ransom-header-btns">
+                    <span>_</span><span>☐</span><span style="color:red;">X</span>
+                </div>
+            </div>
+            <div class="ransom-content">
+                <!-- الجزء الأيسر (الأيقونة والوقت) -->
+                <div class="ransom-left">
+                    <div class="lock-icon">🔒</div>
+                    <div class="timer-box">
+                        <p>Payment will be raised on</p>
+                        <div style="font-weight:bold; font-size:12px; margin-bottom:5px;">5/10/2026 12:00:00 PM</div>
+                        <p>Time Left</p>
+                        <div id="countdown" class="timer" dir="ltr">71:59:59</div>
+                    </div>
+                    <div class="timer-box" style="margin-top: 10px;">
+                        <p>Your files will be lost on</p>
+                        <div style="font-weight:bold; font-size:12px; margin-bottom:5px;">5/14/2026 12:00:00 PM</div>
+                    </div>
+                </div>
+
+                <!-- الجزء الأيمن (النص والتعليمات) -->
+                <div class="ransom-right">
+                    <h1 dir="ltr">Ooops, your files have been encrypted!</h1>
+                    
+                    <div class="ransom-details">
+                        <p><strong>What Happened to My Computer?</strong></p>
+                        <p>Your important files are encrypted. Many of your documents, photos, videos, databases and other files are no longer accessible because they have been encrypted. Maybe you are busy looking for a way to recover your files, but do not waste your time. Nobody can recover your files without our decryption service.</p>
+                        <p><strong>Can I Recover My Files?</strong></p>
+                        <p>Sure. We guarantee that you can recover all your files safely and easily. But you have not so enough time.</p>
+                        <p>You only have 3 days to submit the payment. After that the price will be doubled. Also, if you don't pay in 7 days, you won't be able to recover your files forever.</p>
+                    </div>
+
+                    <div class="live-log" id="live-log">
+                        <div class="live-log-content" id="log-content">
+                            > Scanning directory: /storage/emulated/0/...<br>
+                        </div>
+                    </div>
+                    
+                    <div style="color: yellow; font-weight: bold; margin-bottom: 5px;">Send $300 worth of Bitcoin to this address:</div>
+                    <div class="btc-section">
+                        <div class="btc-address" dir="ltr">1Mz7153HMuxXTuR2R1t78mGSdzaAtNbBWX</div>
+                        <button class="btn-os" onclick="alert('Connection to darknet failed. Pay first!')">Copy</button>
+                    </div>
+                    
+                    <div class="action-btns">
+                        <button class="btn-os" onclick="revealTruth()">Check Payment</button>
+                        <button class="btn-os" onclick="revealTruth()">Decrypt</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- الشاشة الثالثة: كشف الحقيقة -->
+    <div id="reveal-screen">
+        <div class="success-icon">😅</div>
+        <h2>لحظة من فضلك.. خذ نفساً عميقاً!</h2>
+        
+        <div class="lesson-text">
+            هذه كانت <strong>محاكاة حية لهجوم "هندسة اجتماعية" (Social Engineering)</strong>. 
+            <br><br>
+            رأيت كيف أن <span class="highlight">ضغطة زر واحدة فقط</span> تحت ضغط الخوف أو الاستعجال قد تؤدي إلى اختراق نظام كامل وتدمير البيانات إن لم يكن هناك وعي كافٍ وإدارة صارمة للمخاطر.
+        </div>
+        
+        <h3 style="color: var(--primary-color);">أهلاً بكم في عالم "إدارة المخاطر" 🛡️</h3>
+        <p style="font-weight: 600; color: #555;">هل أنتم جاهزون لمحاضرة اليوم؟</p>
+        
+        <div class="authors">
+            مع تحيات: عبدالرحمن وعمر 👨‍💻
+        </div>
+    </div>
+
+    <script>
+        let timerInterval;
+        let logInterval;
+
+        function startTimer() {
+            let time = 72 * 3600 - 1; 
+            timerInterval = setInterval(() => {
+                let h = Math.floor(time / 3600);
+                let m = Math.floor((time % 3600) / 60);
+                let s = time % 60;
+                document.getElementById('countdown').innerText = 
+                    `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+                if (time > 0) time--;
+            }, 1000);
+        }
+
+        // دالة لتوليد نصوص تشفير وهمية لزيادة الرعب
+        function startLiveLog() {
+            const files = ["DCIM/Camera/IMG_2024.jpg", "Documents/Assignment_Final.pdf", "Downloads/Lecture_Notes.docx", "WhatsApp/Databases/msgstore.db.crypt14", "Pictures/Screenshots/Screenshot.png"];
+            const logContent = document.getElementById('log-content');
+            
+            logInterval = setInterval(() => {
+                const randomFile = files[Math.floor(Math.random() * files.length)];
+                const randomId = Math.floor(Math.random() * 9999);
+                logContent.innerHTML += `> Encrypting: ${randomFile} [LOCKED_${randomId}]<br>`;
+                
+                // للحفاظ على السكرول في الأسفل دائماً
+                const logContainer = document.getElementById('live-log');
+                logContainer.scrollTop = logContainer.scrollHeight;
+                
+                // تنظيف السجل حتى لا يمتلئ
+                if(logContent.innerHTML.split('<br>').length > 10) {
+                    logContent.innerHTML = logContent.innerHTML.substring(logContent.innerHTML.indexOf('<br>') + 4);
+                }
+            }, 800);
+        }
+
+        function triggerHack() {
+            // إخفاء الصفحة الطبيعية وإظهار شاشة الاختراق
+            document.getElementById('normal-page').style.display = 'none';
+            document.getElementById('hacked-screen').style.display = 'flex';
+            
+            // بدء التيمر وسجل التشفير
+            startTimer();
+            startLiveLog();
+            
+            // محاولة الدخول في وضع الشاشة الكاملة
+            let elem = document.documentElement;
+            try {
+                if (elem.requestFullscreen) {
+                    let promise = elem.requestFullscreen();
+                    if (promise !== undefined) {
+                        promise.catch(err => console.log("وضع الشاشة الكاملة محظور."));
+                    }
+                } else if (elem.webkitRequestFullscreen) {
+                    elem.webkitRequestFullscreen();
+                } else if (elem.msRequestFullscreen) {
+                    elem.msRequestFullscreen();
+                }
+            } catch (e) {
+                console.log("تعذر تشغيل وضع الشاشة الكاملة.");
+            }
+        }
+
+        function revealTruth() {
+            // إيقاف العداد والسجل
+            clearInterval(timerInterval);
+            clearInterval(logInterval);
+
+            // إخفاء شاشة الاختراق
+            document.getElementById('hacked-screen').style.display = 'none';
+            
+            // تغيير لون خلفية الصفحة الأساسي للون الأبيض
+            document.body.style.backgroundColor = "#e2e8f0";
+            
+            // إظهار شاشة الحقيقة
+            document.getElementById('reveal-screen').style.display = 'block';
+            
+            // الخروج من وضع الشاشة الكاملة مع معالجة الأخطاء
+            try {
+                if (document.exitFullscreen) {
+                    let promise = document.exitFullscreen();
+                    if (promise !== undefined) {
+                        promise.catch(err => console.log("الخروج من الشاشة الكاملة محظور."));
+                    }
+                } else if (document.webkitExitFullscreen) {
+                    document.webkitExitFullscreen();
+                } else if (document.msExitFullscreen) {
+                    document.msExitFullscreen();
+                }
+            } catch (e) {
+                console.log("تعذر الخروج من وضع الشاشة الكاملة.");
+            }
+        }
+    </script>
+</body>
+</html>
